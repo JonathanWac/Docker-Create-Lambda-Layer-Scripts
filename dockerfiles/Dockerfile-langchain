@@ -1,0 +1,20 @@
+# Start from the official Python 3.11 image
+FROM python:3.11
+
+# Install zip
+RUN apt-get update && apt-get install -y zip
+
+# Create the package directory
+RUN mkdir -p /package/python
+
+# Set the working directory
+WORKDIR /package/python
+
+# Install the langchain and boto3 libraries
+RUN pip install langchain --target /package/python
+
+# Go back to the package root
+WORKDIR /package
+
+# Zip the contents for the Lambda layer
+RUN zip -r /package/lambda-layer.zip .
